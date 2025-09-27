@@ -1,0 +1,70 @@
+# cauldron/muirdris/fastapi/pod.yml
+# Configuration du service FastAPI pour Dagda-Lite
+# API REST et serveur web Python
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dagda-lite-fastapi-pod
+  labels:
+    app: dagda-lite
+    service: fastapi
+    category: cromlech
+spec:
+  containers:
+  - name: dagda-lite-fastapi
+    image: ${CONTAINER_REGISTRY}/dagda-lite-fastapi:latest
+    ports:
+    - containerPort: 8000
+      hostPort: ${API_PORT}
+    env:
+    - name: HOST
+      value: "${HOST}"
+    - name: LLAMA_PORT
+      value: "${LLAMA_PORT}"
+    - name: QWEN_PORT
+      value: "${QWEN_PORT}"
+    - name: FASTAPI_ENV
+      value: "${FASTAPI_ENV}"
+    - name: APP_HOME
+      value: "${APP_HOME}"
+    volumeMounts:
+    - name: fastapi-data
+      mountPath: ${APP_HOME}/data
+    - name: fastapi-config
+      mountPath: ${APP_HOME}/config
+    - name: fastapi-app
+      mountPath: ${APP_HOME}/app
+    resources:
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+      requests:
+        memory: "256Mi"
+        cpu: "250m"
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: 8000
+      initialDelaySeconds: 30
+      periodSeconds: 10
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 8000
+      initialDelaySeconds: 5
+      periodSeconds: 5
+  volumes:
+  - name: fastapi-data
+    hostPath:
+      path: ${MUIRDRIS_DIR}/fastapi/data
+      type: DirectoryOrCreate
+  - name: fastapi-config
+    hostPath:
+      path: ${MUIRDRIS_DIR}/fastapi/config
+      type: DirectoryOrCreate
+  - name: fastapi-app
+    hostPath:
+      path: ${MUIRDRIS_DIR}/fastapi/app
+      type: DirectoryOrCreate
+  restartPolicy: Always

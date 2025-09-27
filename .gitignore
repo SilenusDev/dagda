@@ -1,0 +1,170 @@
+# ===================================
+# DAGDA-LITE - GITIGNORE SÉCURISÉ
+# ===================================
+
+# === SÉCURITÉ CRITIQUE ===
+# Variables d'environnement et secrets
+.env
+.env.local
+.env.production
+.env.staging
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# === DONNÉES ET MODÈLES LLM ===
+# Répertoires de données (peuvent être volumineux)
+data/*/data/
+data/cromlech/*/data/
+data/faeries/*/data/
+data/fianna/*/data/
+
+# Modèles GGUF et fichiers ML
+*.gguf
+*.bin
+*.safetensors
+*.pt
+*.pth
+*.onnx
+*.tflite
+models/
+checkpoints/
+
+# === CONTENEURS ET ORCHESTRATION ===
+# Données Podman/Docker
+Nemeton/*/data/
+*/data/mysql/
+*/data/mariadb/
+*/data/postgres/
+*/data/redis/
+
+# MariaDB - exclusions spécifiques pour éviter les erreurs de permissions
+Nemeton/cromlech/mariadb/data/
+**/mariadb/data/
+**/mysql/data/
+**/.my-healthcheck.cnf
+
+# Logs conteneurs
+*.container.log
+podman-compose.override.yml
+docker-compose.override.yml
+
+# === LOGS ET MONITORING ===
+# Fichiers de logs
+*.log
+*.log.*
+logs/
+/var/log/
+*.out
+*.err
+
+# Monitoring et métriques
+*.pid
+*.sock
+*.tmp
+
+# === DÉVELOPPEMENT ===
+# IDE et éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Environnements virtuels Python
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# === SYSTÈME ET CACHE ===
+# Cache système
+.cache/
+*.cache
+.tmp/
+tmp/
+
+# Fichiers système
+*.pid
+*.lock
+.fuse_hidden*
+
+# === SAUVEGARDE ET TEMPORAIRE ===
+# Fichiers de sauvegarde
+*.bak
+*.backup
+*.old
+*.orig
+*.save
+
+# Fichiers temporaires
+*.temp
+*.temporary
+.temporary/
+
+# === TESTS ET COUVERTURE ===
+# Tests
+.coverage
+.pytest_cache/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# === DOCUMENTATION GÉNÉRÉE ===
+# Documentation auto-générée
+site/
+.mkdocs/
+
+# === SPÉCIFIQUE DAGDA-LITE ===
+# Répertoires de travail temporaires
+coire-anseasc/tmp/
+scripts/tmp/
+
+# Fichiers de configuration locaux
+*.local.yml
+*.local.yaml
+*-local.conf
+
+# Certificats et clés SSL
+*.crt
+*.csr
+ssl/
+
+# === EXCLUSIONS IMPORTANTES ===
+# Garder les templates et exemples
+!.env.example
+!config/*.example
+!templates/
+!docs/

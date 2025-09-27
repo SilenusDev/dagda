@@ -1,0 +1,31 @@
+# cauldron/fianna/n8n/pod.yml
+# Configuration du service N8N pour Dagda-Lite
+# Plateforme d'automatisation de workflows
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dagda-lite-n8n-pod
+spec:
+  containers:
+  - name: dagda-lite-n8n
+    image: n8nio/n8n:latest
+    ports:
+    - containerPort: 5678
+      hostPort: ${WORKFLOW_PORT}
+    env:
+    - name: N8N_HOST
+      value: "${HOST}"
+    - name: N8N_PORT
+      value: "5678"
+    - name: N8N_PROTOCOL
+      value: "http"
+    volumeMounts:
+    - name: n8n-data
+      mountPath: /home/node/.n8n
+  volumes:
+  - name: n8n-data
+    hostPath:
+      path: ${FIANNA_DIR}/n8n/data
+      type: DirectoryOrCreate
+  restartPolicy: Always

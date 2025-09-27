@@ -1,0 +1,26 @@
+{
+  "cromlech": {
+    "mariadb": {
+      "status": "eveil",
+      "port": 8902,
+      "health": "unknown",
+      "last_eveil": "2025-09-19T16:32:43+02:00"
+    },
+    "fastapi": {
+      "status": "dormant",
+      "port": 8903,
+      "health": "unknown",
+      "last_eveil": null
+    }
+  },
+  "fianna": {
+    "adminer": {
+      "status": "dormant",
+      "port": 8904
+    },
+    "n8n": {
+      "status": "dormant",
+      "port": 8905
+    }
+  }
+}

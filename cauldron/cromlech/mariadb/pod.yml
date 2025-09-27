@@ -1,0 +1,52 @@
+# cauldron/cromlech/mariadb/pod.yml
+# Configuration du service MariaDB pour Dagda-Lite
+# Base de données MariaDB
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dagda-lite-mariadb-pod
+spec:
+  containers:
+  - name: dagda-lite-mariadb
+    image: docker.io/library/mariadb:latest
+    ports:
+    - containerPort: 3306
+      hostPort: ${DB_PORT}
+    env:
+    - name: MARIADB_ROOT_PASSWORD
+      value: "${DB_ROOT_PASSWORD}"
+    - name: MARIADB_DATABASE
+      value: "${DB_NAME}"
+    - name: MARIADB_USER
+      value: "${DB_USER}"
+    - name: MARIADB_PASSWORD
+      value: "${DB_PASSWORD}"
+    # Variables pour créer automatiquement la base dagda et l'utilisateur
+    - name: MARIADB_MULTIPLE_DATABASES
+      value: "${DB_NAME},${DAGDA_DB_NAME}"
+    - name: MARIADB_MULTIPLE_USERS
+      value: "${DB_USER},${DAGDA_DB_USER}"
+    - name: MARIADB_MULTIPLE_PASSWORDS
+      value: "${DB_PASSWORD},${DAGDA_DB_PASSWORD}"
+    volumeMounts:
+    - name: mariadb-data
+      mountPath: /var/lib/mysql
+    - name: mariadb-config
+      mountPath: /etc/mysql/conf.d
+    - name: mariadb-init
+      mountPath: /docker-entrypoint-initdb.d
+  volumes:
+  - name: mariadb-data
+    hostPath:
+      path: ${CROMLECH_DIR}/mariadb/data
+      type: DirectoryOrCreate
+  - name: mariadb-config
+    hostPath:
+      path: ${CROMLECH_DIR}/mariadb/config
+      type: DirectoryOrCreate
+  - name: mariadb-init
+    hostPath:
+      path: ${CROMLECH_DIR}/mariadb/init
+      type: DirectoryOrCreate
+  restartPolicy: Always

@@ -1,0 +1,30 @@
+# cauldron/muirdris/qwen25-05b/pod.yml
+# Configuration du sigil Qwen2.5-0.5B pour Dagda-Lite
+# Modèle de langage Qwen2.5-0.5B
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dagda-lite-qwen25-05b-pod
+spec:
+  containers:
+  - name: dagda-lite-qwen25-05b
+    image: ghcr.io/ggml-org/llama.cpp:server
+    ports:
+    - containerPort: ${LLAMA_CONTAINER_PORT}
+      hostPort: ${QWEN25_05_PORT}
+    volumeMounts:
+    - name: qwen25-05b-data
+      mountPath: /models
+    - name: qwen25-05b-config
+      mountPath: /config
+  volumes:
+  - name: qwen25-05b-data
+    hostPath:
+      path: ./data
+      type: DirectoryOrCreate
+  - name: qwen25-05b-config
+    hostPath:
+      path: ./config
+      type: DirectoryOrCreate
+  restartPolicy: Always

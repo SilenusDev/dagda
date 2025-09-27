@@ -1,0 +1,36 @@
+# Template de sigil pour nouveaux services
+metadata:
+  name: "{{POD_NAME}}"
+  category: "{{CATEGORY}}"  # cromlech | fianna
+  description: "{{DESCRIPTION}}"
+  
+resources:
+  priority: "{{PRIORITY}}"  # sacred | noble | common
+  memory_limit: "{{MEMORY}}"
+  cpu_limit: "{{CPU}}"
+  auto_shutdown: {{AUTO_SHUTDOWN}}
+
+network:
+  ports:
+    main: {{PORT}}
+  expose: true
+
+dependencies:
+  requires: {{DEPENDENCIES}}
+
+volumes:
+  - type: data
+    host: "./data"
+    container: "{{DATA_PATH}}"
+
+image:
+  source: "{{IMAGE}}"
+  
+environment:
+  {{ENVIRONMENT_VARS}}
+
+health:
+  check: "{{HEALTH_COMMAND}}"
+  interval: 30s
+  timeout: 5s
+  retries: 3

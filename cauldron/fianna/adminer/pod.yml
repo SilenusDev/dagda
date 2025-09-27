@@ -1,0 +1,24 @@
+# cauldron/fianna/adminer/pod.yml
+# Configuration du service Adminer pour Dagda-Lite
+# Interface d'administration de base de données
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dagda-lite-adminer-pod
+spec:
+  containers:
+  - name: dagda-lite-adminer
+    image: docker.io/library/adminer:latest
+    ports:
+    - containerPort: 8080
+      hostPort: ${ADMIN_PORT}
+    volumeMounts:
+    - name: adminer-data
+      mountPath: /var/www/html/plugins-enabled
+  volumes:
+  - name: adminer-data
+    hostPath:
+      path: ${FIANNA_DIR}/adminer/data
+      type: DirectoryOrCreate
+  restartPolicy: Always
