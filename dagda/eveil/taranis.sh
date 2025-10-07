@@ -87,7 +87,7 @@ case "$1" in
         fastapi_status=$?
         
         echo "[taranis][step] 📦 Démarrage de Yarn (environnement SolidJS)..."
-        "${TEINE_ENGINE_SCRIPT}" start "${GEASA_DIR}/yarn"
+        "${TEINE_ENGINE_SCRIPT}" start "${CROMLECH_DIR}/yarn"
         yarn_status=$?
         
         echo "[taranis][info] =========================================="
@@ -126,11 +126,11 @@ case "$1" in
         ;;
     llama)
         echo "[taranis][info] Démarrage de Llama"
-        "${TEINE_ENGINE_SCRIPT}" start "${MUIRDRIS_DIR}/llama"
+        "${TEINE_ENGINE_SCRIPT}" start "${MUIRDRIS_DIR}/faeries/llama"
         ;;
     qwen)
         echo "[taranis][info] Démarrage de Qwen"
-        "${TEINE_ENGINE_SCRIPT}" start "${MUIRDRIS_DIR}/qwen25-05b"
+        "${TEINE_ENGINE_SCRIPT}" start "${MUIRDRIS_DIR}/faeries/qwen"
         ;;
     adminer)
         echo "[taranis][info] Démarrage d'Adminer"
@@ -142,11 +142,7 @@ case "$1" in
         ;;
     yarn)
         echo "[taranis][info] Démarrage de Yarn"
-        "${TEINE_ENGINE_SCRIPT}" start "${GEASA_DIR}/yarn"
-        ;;
-    sidhe)
-        echo "[taranis][info] Démarrage de Sidhe"
-        "${TEINE_ENGINE_SCRIPT}" start "${DAGDA_ROOT}/cauldron/ogmios/sidhe"
+        "${TEINE_ENGINE_SCRIPT}" start "${CROMLECH_DIR}/yarn"
         ;;
     # Commandes d'arrêt par pod
     stop)
@@ -161,11 +157,11 @@ case "$1" in
                 ;;
             llama)
                 echo "[taranis][info] Arrêt de Llama"
-                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/llama"
+                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/faeries/llama"
                 ;;
             qwen)
                 echo "[taranis][info] Arrêt de Qwen"
-                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/qwen25-05b"
+                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/faeries/qwen"
                 ;;
             adminer)
                 echo "[taranis][info] Arrêt d'Adminer"
@@ -177,15 +173,11 @@ case "$1" in
                 ;;
             yarn)
                 echo "[taranis][info] Arrêt de Yarn"
-                "${TEINE_ENGINE_SCRIPT}" stop "${GEASA_DIR}/yarn"
-                ;;
-            sidhe)
-                echo "[taranis][info] Arrêt de Sidhe"
-                "${TEINE_ENGINE_SCRIPT}" stop "${DAGDA_ROOT}/cauldron/ogmios/sidhe"
+                "${TEINE_ENGINE_SCRIPT}" stop "${CROMLECH_DIR}/yarn"
                 ;;
             dagda)
                 echo "[taranis][info] Arrêt des services essentiels DAGDA-LITE"
-                "${TEINE_ENGINE_SCRIPT}" stop "${GEASA_DIR}/yarn" 2>/dev/null || true
+                "${TEINE_ENGINE_SCRIPT}" stop "${CROMLECH_DIR}/yarn" 2>/dev/null || true
                 "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/fastapi" 2>/dev/null || true
                 "${TEINE_ENGINE_SCRIPT}" stop "${CROMLECH_DIR}/mariadb" 2>/dev/null || true
                 echo "[taranis][success] Services essentiels DAGDA-LITE arrêtés"
@@ -193,13 +185,13 @@ case "$1" in
             all)
                 echo "[taranis][info] Arrêt de tous les services Dagda-Lite"
                 echo "[taranis][step] Arrêt des environnements..."
-                "${TEINE_ENGINE_SCRIPT}" stop "${GEASA_DIR}/yarn" 2>/dev/null || true
+                "${TEINE_ENGINE_SCRIPT}" stop "${CROMLECH_DIR}/yarn" 2>/dev/null || true
                 echo "[taranis][step] Arrêt des applications..."
                 "${TEINE_ENGINE_SCRIPT}" stop "${FIANNA_DIR}/n8n" 2>/dev/null || true
                 "${TEINE_ENGINE_SCRIPT}" stop "${FIANNA_DIR}/adminer" 2>/dev/null || true
                 echo "[taranis][step] Arrêt de l'écosystème Python..."
-                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/qwen25-05b" 2>/dev/null || true
-                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/llama" 2>/dev/null || true
+                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/faeries/qwen" 2>/dev/null || true
+                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/faeries/llama" 2>/dev/null || true
                 "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/fastapi" 2>/dev/null || true
                 echo "[taranis][step] Arrêt des services essentiels..."
                 "${TEINE_ENGINE_SCRIPT}" stop "${CROMLECH_DIR}/mariadb" 2>/dev/null || true
@@ -217,7 +209,7 @@ case "$1" in
             dagda|"")
                 echo "[taranis][info] Nettoyage complet des services essentiels DAGDA-LITE"
                 echo "[taranis][step] Nettoyage de Yarn..."
-                "${TEINE_ENGINE_SCRIPT}" clean "${GEASA_DIR}/yarn" 2>/dev/null || true
+                "${TEINE_ENGINE_SCRIPT}" clean "${CROMLECH_DIR}/yarn" 2>/dev/null || true
                 echo "[taranis][step] Nettoyage de FastAPI..."
                 "${TEINE_ENGINE_SCRIPT}" clean "${MUIRDRIS_DIR}/fastapi" 2>/dev/null || true
                 echo "[taranis][step] Nettoyage de MariaDB..."
@@ -227,13 +219,13 @@ case "$1" in
             all)
                 echo "[taranis][info] Nettoyage complet de tous les services Dagda-Lite"
                 echo "[taranis][step] Nettoyage des environnements..."
-                "${TEINE_ENGINE_SCRIPT}" clean "${GEASA_DIR}/yarn" 2>/dev/null || true
+                "${TEINE_ENGINE_SCRIPT}" clean "${CROMLECH_DIR}/yarn" 2>/dev/null || true
                 echo "[taranis][step] Nettoyage des applications..."
                 "${TEINE_ENGINE_SCRIPT}" clean "${FIANNA_DIR}/n8n" 2>/dev/null || true
                 "${TEINE_ENGINE_SCRIPT}" clean "${FIANNA_DIR}/adminer" 2>/dev/null || true
                 echo "[taranis][step] Nettoyage de l'écosystème Python..."
-                "${TEINE_ENGINE_SCRIPT}" clean "${MUIRDRIS_DIR}/qwen25-05b" 2>/dev/null || true
-                "${TEINE_ENGINE_SCRIPT}" clean "${MUIRDRIS_DIR}/llama" 2>/dev/null || true
+                "${TEINE_ENGINE_SCRIPT}" clean "${MUIRDRIS_DIR}/faeries/qwen" 2>/dev/null || true
+                "${TEINE_ENGINE_SCRIPT}" clean "${MUIRDRIS_DIR}/faeries/llama" 2>/dev/null || true
                 "${TEINE_ENGINE_SCRIPT}" clean "${MUIRDRIS_DIR}/fastapi" 2>/dev/null || true
                 echo "[taranis][step] Nettoyage des services essentiels..."
                 "${TEINE_ENGINE_SCRIPT}" clean "${CROMLECH_DIR}/mariadb" 2>/dev/null || true
@@ -249,15 +241,15 @@ case "$1" in
                 ;;
             yarn)
                 echo "[taranis][info] Nettoyage de Yarn"
-                "${TEINE_ENGINE_SCRIPT}" clean "${GEASA_DIR}/yarn"
+                "${TEINE_ENGINE_SCRIPT}" clean "${CROMLECH_DIR}/yarn"
                 ;;
             llama)
                 echo "[taranis][info] Nettoyage de Llama"
-                "${TEINE_ENGINE_SCRIPT}" clean "${MUIRDRIS_DIR}/llama"
+                "${TEINE_ENGINE_SCRIPT}" clean "${MUIRDRIS_DIR}/faeries/llama"
                 ;;
             qwen)
                 echo "[taranis][info] Nettoyage de Qwen"
-                "${TEINE_ENGINE_SCRIPT}" clean "${MUIRDRIS_DIR}/qwen25-05b"
+                "${TEINE_ENGINE_SCRIPT}" clean "${MUIRDRIS_DIR}/faeries/qwen"
                 ;;
             adminer)
                 echo "[taranis][info] Nettoyage d'Adminer"
@@ -286,11 +278,11 @@ case "$1" in
                 ;;
             llama)
                 echo "[taranis][info] Statut de Llama"
-                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/llama"
+                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/faeries/llama"
                 ;;
             qwen)
                 echo "[taranis][info] Statut de Qwen"
-                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/qwen25-05b"
+                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/faeries/qwen"
                 ;;
             adminer)
                 echo "[taranis][info] Statut d'Adminer"
@@ -302,7 +294,7 @@ case "$1" in
                 ;;
             yarn)
                 echo "[taranis][info] Statut de Yarn"
-                "${TEINE_ENGINE_SCRIPT}" status "${GEASA_DIR}/yarn"
+                "${TEINE_ENGINE_SCRIPT}" status "${CROMLECH_DIR}/yarn"
                 ;;
             dagda)
                 echo "[taranis][info] Statut des services essentiels DAGDA-LITE"
@@ -311,7 +303,7 @@ case "$1" in
                 echo "[taranis][step] FastAPI:"
                 "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/fastapi" 2>/dev/null || echo "[taranis][warning] FastAPI non disponible"
                 echo "[taranis][step] Yarn:"
-                "${TEINE_ENGINE_SCRIPT}" status "${GEASA_DIR}/yarn" 2>/dev/null || echo "[taranis][warning] Yarn non disponible"
+                "${TEINE_ENGINE_SCRIPT}" status "${CROMLECH_DIR}/yarn" 2>/dev/null || echo "[taranis][warning] Yarn non disponible"
                 ;;
             all|"")
                 echo "[taranis][info] Statut global de tous les services Dagda-Lite"
@@ -321,12 +313,12 @@ case "$1" in
                 echo "[taranis][step] FastAPI:"
                 "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/fastapi" 2>/dev/null || echo "[taranis][warning] FastAPI non disponible"
                 echo "[taranis][step] Yarn:"
-                "${TEINE_ENGINE_SCRIPT}" status "${GEASA_DIR}/yarn" 2>/dev/null || echo "[taranis][warning] Yarn non disponible"
+                "${TEINE_ENGINE_SCRIPT}" status "${CROMLECH_DIR}/yarn" 2>/dev/null || echo "[taranis][warning] Yarn non disponible"
                 echo "[taranis][step] === SERVICES OPTIONNELS ==="
                 echo "[taranis][step] Llama:"
-                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/llama" 2>/dev/null || echo "[taranis][warning] Llama non disponible"
+                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/faeries/llama" 2>/dev/null || echo "[taranis][warning] Llama non disponible"
                 echo "[taranis][step] Qwen:"
-                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/qwen25-05b" 2>/dev/null || echo "[taranis][warning] Qwen non disponible"
+                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/faeries/qwen" 2>/dev/null || echo "[taranis][warning] Qwen non disponible"
                 echo "[taranis][step] Adminer:"
                 "${TEINE_ENGINE_SCRIPT}" status "${FIANNA_DIR}/adminer" 2>/dev/null || echo "[taranis][warning] Adminer non disponible"
                 echo "[taranis][step] N8N:"
@@ -370,10 +362,10 @@ case "$1" in
         echo "[taranis][help] === DÉMARRAGE INDIVIDUEL AVEC TEINE_ENGINE ==="
         echo "[taranis][help]   ${TEINE_ENGINE_SCRIPT} start ${CROMLECH_DIR}/mariadb"
         echo "[taranis][help]   ${TEINE_ENGINE_SCRIPT} start ${MUIRDRIS_DIR}/fastapi"
-        echo "[taranis][help]   ${TEINE_ENGINE_SCRIPT} start ${MUIRDRIS_DIR}/llama"
-        echo "[taranis][help]   ${TEINE_ENGINE_SCRIPT} start ${MUIRDRIS_DIR}/qwen25-05b"
+        echo "[taranis][help]   ${TEINE_ENGINE_SCRIPT} start ${MUIRDRIS_DIR}/faeries/llama"
+        echo "[taranis][help]   ${TEINE_ENGINE_SCRIPT} start ${MUIRDRIS_DIR}/faeries/qwen"
         echo "[taranis][help]   ${TEINE_ENGINE_SCRIPT} start ${FIANNA_DIR}/adminer"
         echo "[taranis][help]   ${TEINE_ENGINE_SCRIPT} start ${FIANNA_DIR}/n8n"
-        echo "[taranis][help]   ${TEINE_ENGINE_SCRIPT} start ${GEASA_DIR}/yarn"
+        echo "[taranis][help]   ${TEINE_ENGINE_SCRIPT} start ${CROMLECH_DIR}/yarn"
         ;;
 esac

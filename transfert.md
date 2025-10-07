@@ -564,7 +564,7 @@ tests/
 ./dagda/eveil/taranis.sh yarn
 
 # Structure recommandée
-cauldron/geasa/yarn/workspace/
+cauldron/cromlech/yarn/workspace/
 ├── src/
 │   ├── components/     # Composants réutilisables
 │   ├── pages/         # Pages principales

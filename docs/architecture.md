@@ -1,7 +1,7 @@
 # Architecture DAGDA-LITE - Post-Migration
 
-**Version :** 2.1 (Services essentiels validés)  
-**Date :** 21 septembre 2025  
+**Version :** 2.2 (Interface Sidhe opérationnelle)  
+**Date :** 7 octobre 2025  
 **Statut :** Production Ready (100% complété)
 
 ---
@@ -22,19 +22,15 @@ dagda-lite/
 │   ├── awens-utils/              # Utilitaires bash (ex: awens-utils)
 │   │   ├── ollamh.sh             # Fonctions communes + détection architecture
 │   │   └── imbas-logging.sh      # Système de logs unifié
-│   ├── awen-core/                # Moteur principal (ex: cauldron-core)
 │   │   └── teine_engine.sh       # Moteur générique pods
 │   ├── bairille-dighe/           # Templates configuration
 │   │   └── coire-template.yml    # Template pod générique
 │   └── scripts/                  # Scripts obsolètes (redirection)
 │       └── lug.sh                # Redirige vers dagda/eveil/taranis.sh
-├── cauldron/                     # Services conteneurisés (ex: Nemeton)
-│   ├── cromlech/                 # Services essentiels - Base de données uniquement
-│   │   └── mariadb/              # Base de données 
-│   │       ├── pod.yml           # Configuration Podman
-│   │       ├── manage.sh         # Script de gestion
-│   │       ├── data/             # Données persistantes
-│   │       └── config/           # Configuration MariaDB
+├── cauldron/                       # SERVICES CONTENEURISÉS 🔥
+│   ├── cromlech/                   # Bases de données
+│   │   ├── mariadb/               # MariaDB
+│   │   └── yarn/                  # Gestionnaire paquets Node.js
 │   ├── muirdris/                 # Système Python unifié (FastAPI + LLM)
 │   │   ├── fastapi/              # Service API + Interface Web 
 │   │   │   ├── pod.yml           # Configuration Podman
@@ -52,32 +48,28 @@ dagda-lite/
 │   │   │   ├── requirements.txt  # Dépendances Python
 │   │   │   ├── data/             # Données application
 │   │   │   └── config/           # Configuration FastAPI
-│   │   ├── llama/                # Service LLM Llama
-│   │   │   ├── pod.yml           # Configuration Podman
-│   │   │   ├── manage.sh         # Script de gestion
-│   │   │   ├── data/             # Modèles Llama
-│   │   │   └── config/           # Configuration Llama
-│   │   └── qwen25-05b/           # Service LLM Qwen2.5-0.5B
-│   │       ├── pod.yml           # Configuration Podman
-│   │       ├── manage.sh         # Script de gestion
-│   │       ├── data/             # Modèles Qwen
-│   │       └── config/           # Configuration Qwen
-│   ├── fianna/                   # Applications (ex: applications)
-│   │   ├── adminer/              # Interface base de données
-│   │   │   ├── pod.yml           # Configuration Podman
-│   │   │   ├── manage.sh         # Script de gestion
-│   │   │   └── data/             # Données Adminer
-│   │   └── n8n/                  # Automatisation workflows
-│   │       ├── pod.yml           # Configuration Podman
-│   │       ├── manage.sh         # Script de gestion
-│   │       └── data/             # Données N8N
-│   └── geasa/                    # Environnements (nouveau)
-│       └── yarn/                 # Gestionnaire paquets Node.js 
+│   │   └── faeries/              # Services IA (LLM)
+│   │       ├── llama/            # Service LLM Llama
+│   │       │   ├── pod.yml       # Configuration Podman
+│   │       │   ├── manage.sh     # Script de gestion
+│   │       │   ├── data/         # Modèles Llama
+│   │       │   └── config/       # Configuration Llama
+│   │       └── qwen/       # Service LLM Qwen2.5-0.5B
+│   │           ├── pod.yml       # Configuration Podman
+│   │           ├── manage.sh     # Script de gestion
+│   │           ├── data/         # Modèles Qwen
+│   │           └── config/       # Configuration Qwen
+│   └── fianna/                   # Applications
+│       ├── adminer/              # Interface base de données
+│       │   ├── pod.yml           # Configuration Podman
+│       │   ├── manage.sh         # Script de gestion
+│       │   └── data/             # Données Adminer
+│       └── n8n/                  # Automatisation workflows
 │           ├── pod.yml           # Configuration Podman
 │           ├── manage.sh         # Script de gestion
-│           ├── data/             # Cache Yarn
-│           ├── config/           # Configuration Yarn
-│           └── workspace/        # Espace de travail SolidJS
+│           └── data/             # Données N8N
+├── dolmen/                        # Système de monitoring
+│   └── service_status.json       # État temps réel des services
 └── sidhe/                        # Interface utilisateur SolidJS (à implémenter)
     ├── dist/                     # Build SolidJS (servi par FastAPI)
     ├── src/                      # Code source SolidJS
@@ -110,13 +102,13 @@ dagda-lite/
 - **Port :** YARN_PORT=8907
 - **Statut :**  (2 conteneurs)
 - **Fonction :** Gestionnaire paquets Node.js + environnement SolidJS
-- **Localisation :** `/cauldron/geasa/yarn/`
+- **Localisation :** `/cauldron/cromlech/yarn/`
 
 ### **Services Optionnels** (démarrage individuel)
 
-#### **LLM Services - Système Python Unifié**
-- **llama** : Modèle LLM Llama (LLAMA_PORT=8905) - `/cauldron/muirdris/llama/`
-- **qwen** : Modèle LLM Qwen2.5-0.5B (QWEN_PORT=8906) - `/cauldron/muirdris/qwen25-05b/`
+#### **LLM Services - Faeries (IA)**
+- **llama** : Modèle LLM Llama (LLAMA_PORT=8905) - `/cauldron/muirdris/faeries/llama/`
+- **qwen** : Modèle LLM Qwen2.5-0.5B (QWEN_PORT=8906) - `/cauldron/muirdris/faeries/qwen/`
 
 #### **Applications**
 - **adminer** : Interface base de données (ADMIN_PORT=8903)
@@ -188,7 +180,6 @@ CAULDRON_DIR=${DAGDA_ROOT}/cauldron
 CROMLECH_DIR=${CAULDRON_DIR}/cromlech
 MUIRDRIS_DIR=${CAULDRON_DIR}/muirdris
 FIANNA_DIR=${CAULDRON_DIR}/fianna
-GEASA_DIR=${CAULDRON_DIR}/geasa
 ```
 
 ### Installation et Démarrage

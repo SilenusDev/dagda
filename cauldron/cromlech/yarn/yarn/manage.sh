@@ -1,5 +1,5 @@
 #!/bin/bash
-# cauldron/geasa/yarn/manage.sh
+# cauldron/cromlech/yarn/manage.sh
 # Script de gestion du service Yarn
 
 SCRIPT_NAME="yarn"

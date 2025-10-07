@@ -56,16 +56,16 @@ MYSQL_PASSWORD  # Doit être DB_PASSWORD
 
 **Fichiers concernés :**
 - `dagda/awens-utils/imbas-logging.sh` (ligne 2)
-- `cauldron/muirdris/qwen25-05b/pod.yml` (ligne 1)
-- `cauldron/muirdris/qwen25-05b/manage.sh` (ligne 2)
-- `cauldron/muirdris/llama/manage.sh` (ligne 2)
+- `cauldron/muirdris/faeries/qwen/pod.yml` (ligne 1)
+- `cauldron/muirdris/faeries/qwen/manage.sh` (ligne 2)
+- `cauldron/muirdris/faeries/llama/manage.sh` (ligne 2)
 
 **Détails :**
 ```bash
 # OBSOLÈTE - Références anciennes
 # coire-anseasc/awens-utils/imbas-logging.sh  # Doit être dagda/awens-utils/
-# Nemeton/faeries/qwen25-05b/pod.yml  # Doit être cauldron/muirdris/
-# Nemeton/faeries/llama/manage.sh  # Doit être cauldron/muirdris/
+# Nemeton/faeries/qwen/pod.yml  # Doit être cauldron/muirdris/faeries/
+# Nemeton/faeries/llama/manage.sh  # Doit être cauldron/muirdris/faeries/
 ```
 
 ### 5. SCRIPT OBSOLÈTE DANGEREUX

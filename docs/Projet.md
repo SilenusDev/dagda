@@ -1,10 +1,10 @@
-# Dagda-Lite - Présentation Globale du Projet
+#Dagda-Lite - Présentation Globale du Projet
 
 ## Vue d'Ensemble
 Dagda-Lite est un orchestrateur ultra-léger de pods Podman conçu pour optimiser l'utilisation des ressources système par allumage/extinction à la demande des services. Inspiré de la mythologie celtique, le projet tire son nom du dieu Dagda et de son chaudron magique d'abondance.
 
-**Version actuelle :** 2.1 - Gestion multi-environnements dev/prod  
-**Statut :** Opérationnel (100% fonctionnel)  
+**Version actuelle :** 2.3 - Architecture Faeries (IA)
+**Statut :** Opérationnel (100% fonctionnel)
 **Dernière mise à jour :** 7 octobre 2025
 
 ## Positionnement Produit
@@ -44,17 +44,17 @@ dagda-lite/
 │   │   └── imbas-logging.sh        # Système de logs
 │   └── bairille-dighe/             # Templates configuration
 ├── cauldron/                       # SERVICES CONTENEURISÉS 🔥
-│   ├── cromlech/                   # Base de données
-│   │   └── mariadb/               # Base de données
+│   ├── cromlech/                   # Bases de données
+│   │   ├── mariadb/               # Base de données MariaDB
+│   │   └── yarn/                  # Environnement Node.js/SolidJS
 │   ├── muirdris/                  # Système Python unifié
 │   │   ├── fastapi/               # API REST (image locale taguée)
-│   │   ├── llama/                 # LLM principal
-│   │   └── qwen25-05b/            # LLM alternatif
-│   ├── fianna/                    # Applications
-│   │   ├── adminer/               # Interface base de données
-│   │   └── n8n/                   # Automatisation workflow
-│   └── geasa/                     # Environnements
-│       └── yarn/                  # SolidJS
+│   │   └── faeries/               # Services IA (LLM)
+│   │       ├── llama/             # LLM principal
+│   │       └── qwen/        # LLM alternatif
+│   └── fianna/                    # Applications
+│       ├── adminer/               # Interface base de données
+│       └── n8n/                   # Automatisation workflow
 ├── sidhe/                          # INTERFACE UTILISATEUR 🎨
 │   ├── src/                       # Code source SolidJS
 │   ├── .env.example               # Variables interface
@@ -83,12 +83,18 @@ dagda-lite/
 - **Affichage sexy** : IP:ports avec émojis et statut détaillé
 
 ### Services Intégrés
+
+#### Services Essentiels
 - **MariaDB** (port 8901) - Base de données relationnelle
 - **FastAPI** (port 8902) - API REST avec intégration LLM
 - **Yarn** (port 8907) - Environnement de développement SolidJS
 - **Interface SolidJS** (port 8900) - Interface utilisateur moderne
-- **Llama** (port 8905) - Modèle IA principal
-- **Qwen** (port 8906) - Modèle IA alternatif
+
+#### Services IA (Faeries)
+- **Llama** (port 8905) - Modèle IA principal (`/muirdris/faeries/llama/`)
+- **Qwen** (port 8906) - Modèle IA alternatif (`/muirdris/faeries/qwen/`)
+
+#### Applications
 - **Adminer** (port 8903) - Interface base de données
 - **N8N** (port 8904) - Automatisation workflow
 
@@ -183,19 +189,20 @@ dagda-lite/
 
 ## Évolutions Récentes
 
-### Version 2.0 - Septembre 2025
+### Version 2.3 - Octobre 2025
+- **Architecture Faeries** : Regroupement des services IA dans `/muirdris/faeries/`
+- **Nettoyage architecture** : Suppression de `geasa/` et `ogmios/` (doublons)
+- **Yarn déplacé** : De `geasa/` vers `cromlech/` (cohérence architecture)
+- **Chemins corrigés** : Tous les scripts et docs mis à jour
+- **Monitoring** : `dolmen/` à la racine pour suivi des services
+
+### Version 2.2 - Septembre 2025
 - **Correction FastAPI** : Problème registry Docker résolu
 - **Règles diagnostic** : .windsurfrules avec méthodologie complète
 - **Affichage amélioré** : IP:ports avec émojis et statut
 - **Interface SolidJS** : Permissions corrigées, VITE_PORT ajouté
 - **Procédures rollback** : Sauvegarde automatique avant modifications
 - **Validation utilisateur** : Confirmation pour actions critiques
-
-### Corrections Majeures
-- **FastAPI** : Tag image locale vers registry (solution minimale)
-- **Permissions** : chmod +x launch-sidhe.sh
-- **Variables** : VITE_PORT=8900 ajouté
-- **Diagnostic** : Checklist obligatoire implémentée
 
 ## Roadmap
 

@@ -23,31 +23,37 @@ Orchestrateur ultra-léger de containers Podman avec gestion multi-environnement
 ## Commandes
 
 ```bash
-# Services
-./dagda/eveil/taranis.sh dagda           # Démarrer essentiels
+# Services essentiels
+./dagda/eveil/taranis.sh dagda           # MariaDB + FastAPI + Yarn
+
+# Services individuels
+./dagda/eveil/taranis.sh sidhe           # Interface SolidJS
 ./dagda/eveil/taranis.sh mariadb|fastapi|llama|qwen|adminer|n8n
+
+# Gestion
 ./dagda/eveil/taranis.sh stop all
 ./dagda/eveil/taranis.sh status all
 
-# Environnements
-./dagda/eveil/switch-env.sh dev|prod     # Forcer env
-./dagda/eveil/switch-env.sh status       # Voir env actuel
+# Environnements (dev/prod)
+./dagda/eveil/switch-env.sh dev|prod
+./dagda/eveil/switch-env.sh status
 ```
 
 ## Ports
 
-| Service | Port |
-|---------|------|
-| MariaDB | 8901 |
-| FastAPI | 8902 |
-| Adminer | 8903 |
-| Llama   | 8905 |
-| Qwen    | 8906 |
-| Yarn    | 8907 |
-| Vite    | 8900 |
+| Service | Port | URL |
+|---------|------|-----|
+| Sidhe (Vite) | 8900 | http://localhost:8900 |
+| MariaDB | 8901 | - |
+| FastAPI | 8902 | http://localhost:8902/docs |
+| Adminer | 8903 | http://localhost:8903 |
+| Llama   | 8905 | http://localhost:8905 |
+| Qwen    | 8906 | http://localhost:8906 |
+| Yarn    | 8907 | - |
 
 ## Documentation
 
 - `/docs/env.md` - Gestion environnements dev/prod
+- `/docs/sidhe-interface.md` - Interface SolidJS
 - `/docs/architecture.md` - Architecture détaillée
-- `/docs/Projet.md` - Vue d'ensemble 
+- `/docs/Projet.md` - Vue d'ensemble

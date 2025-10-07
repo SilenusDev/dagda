@@ -35,7 +35,7 @@ case "$1" in
         fastapi_status=$?
         
         echo "[lug][step] Démarrage de Yarn (environnement SolidJS)..."
-        "${TEINE_ENGINE_SCRIPT}" start "${GEASA_DIR}/yarn"
+        "${TEINE_ENGINE_SCRIPT}" start "${CROMLECH_DIR}/yarn"
         yarn_status=$?
         
         if [ $mariadb_status -eq 0 ] && [ $fastapi_status -eq 0 ] && [ $yarn_status -eq 0 ]; then
@@ -59,11 +59,11 @@ case "$1" in
         ;;
     llama)
         echo "[lug][info] Démarrage de Llama"
-        "${TEINE_ENGINE_SCRIPT}" start "${MUIRDRIS_DIR}/llama"
+        "${TEINE_ENGINE_SCRIPT}" start "${MUIRDRIS_DIR}/faeries/llama"
         ;;
     qwen)
         echo "[lug][info] Démarrage de Qwen"
-        "${TEINE_ENGINE_SCRIPT}" start "${MUIRDRIS_DIR}/qwen25-05b"
+        "${TEINE_ENGINE_SCRIPT}" start "${MUIRDRIS_DIR}/faeries/qwen"
         ;;
     adminer)
         echo "[lug][info] Démarrage d'Adminer"
@@ -75,7 +75,7 @@ case "$1" in
         ;;
     yarn)
         echo "[lug][info] Démarrage de Yarn"
-        "${TEINE_ENGINE_SCRIPT}" start "${GEASA_DIR}/yarn"
+        "${TEINE_ENGINE_SCRIPT}" start "${CROMLECH_DIR}/yarn"
         ;;
     stop)
         case "$2" in
@@ -89,11 +89,11 @@ case "$1" in
                 ;;
             llama)
                 echo "[lug][info] Arrêt de Llama"
-                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/llama"
+                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/faeries/llama"
                 ;;
             qwen)
                 echo "[lug][info] Arrêt de Qwen"
-                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/qwen25-05b"
+                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/faeries/qwen"
                 ;;
             adminer)
                 echo "[lug][info] Arrêt d'Adminer"
@@ -105,11 +105,11 @@ case "$1" in
                 ;;
             yarn)
                 echo "[lug][info] Arrêt de Yarn"
-                "${TEINE_ENGINE_SCRIPT}" stop "${GEASA_DIR}/yarn"
+                "${TEINE_ENGINE_SCRIPT}" stop "${CROMLECH_DIR}/yarn"
                 ;;
             dagda)
                 echo "[lug][info] Arrêt des services essentiels DAGDA-LITE"
-                "${TEINE_ENGINE_SCRIPT}" stop "${GEASA_DIR}/yarn" 2>/dev/null || true
+                "${TEINE_ENGINE_SCRIPT}" stop "${CROMLECH_DIR}/yarn" 2>/dev/null || true
                 "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/fastapi" 2>/dev/null || true
                 "${TEINE_ENGINE_SCRIPT}" stop "${CROMLECH_DIR}/mariadb" 2>/dev/null || true
                 echo "[lug][success] Services essentiels DAGDA-LITE arrêtés"
@@ -117,13 +117,13 @@ case "$1" in
             all)
                 echo "[lug][info] Arrêt de tous les services Dagda-Lite"
                 echo "[lug][step] Arrêt des environnements..."
-                "${TEINE_ENGINE_SCRIPT}" stop "${GEASA_DIR}/yarn" 2>/dev/null || true
+                "${TEINE_ENGINE_SCRIPT}" stop "${CROMLECH_DIR}/yarn" 2>/dev/null || true
                 echo "[lug][step] Arrêt des applications..."
                 "${TEINE_ENGINE_SCRIPT}" stop "${FIANNA_DIR}/n8n" 2>/dev/null || true
                 "${TEINE_ENGINE_SCRIPT}" stop "${FIANNA_DIR}/adminer" 2>/dev/null || true
                 echo "[lug][step] Arrêt de l'écosystème Python..."
-                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/qwen25-05b" 2>/dev/null || true
-                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/llama" 2>/dev/null || true
+                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/faeries/qwen" 2>/dev/null || true
+                "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/faeries/llama" 2>/dev/null || true
                 "${TEINE_ENGINE_SCRIPT}" stop "${MUIRDRIS_DIR}/fastapi" 2>/dev/null || true
                 echo "[lug][step] Arrêt des services essentiels..."
                 "${TEINE_ENGINE_SCRIPT}" stop "${CROMLECH_DIR}/mariadb" 2>/dev/null || true
@@ -147,11 +147,11 @@ case "$1" in
                 ;;
             llama)
                 echo "[lug][info] Statut de Llama"
-                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/llama"
+                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/faeries/llama"
                 ;;
             qwen)
                 echo "[lug][info] Statut de Qwen"
-                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/qwen25-05b"
+                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/faeries/qwen"
                 ;;
             adminer)
                 echo "[lug][info] Statut d'Adminer"
@@ -163,7 +163,7 @@ case "$1" in
                 ;;
             yarn)
                 echo "[lug][info] Statut de Yarn"
-                "${TEINE_ENGINE_SCRIPT}" status "${GEASA_DIR}/yarn"
+                "${TEINE_ENGINE_SCRIPT}" status "${CROMLECH_DIR}/yarn"
                 ;;
             dagda)
                 echo "[lug][info] Statut des services essentiels DAGDA-LITE"
@@ -172,7 +172,7 @@ case "$1" in
                 echo "[lug][step] FastAPI:"
                 "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/fastapi" 2>/dev/null || echo "[lug][warning] FastAPI non disponible"
                 echo "[lug][step] Yarn:"
-                "${TEINE_ENGINE_SCRIPT}" status "${GEASA_DIR}/yarn" 2>/dev/null || echo "[lug][warning] Yarn non disponible"
+                "${TEINE_ENGINE_SCRIPT}" status "${CROMLECH_DIR}/yarn" 2>/dev/null || echo "[lug][warning] Yarn non disponible"
                 ;;
             all|"")
                 echo "[lug][info] Statut global de tous les services Dagda-Lite"
@@ -182,12 +182,12 @@ case "$1" in
                 echo "[lug][step] FastAPI:"
                 "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/fastapi" 2>/dev/null || echo "[lug][warning] FastAPI non disponible"
                 echo "[lug][step] Yarn:"
-                "${TEINE_ENGINE_SCRIPT}" status "${GEASA_DIR}/yarn" 2>/dev/null || echo "[lug][warning] Yarn non disponible"
+                "${TEINE_ENGINE_SCRIPT}" status "${CROMLECH_DIR}/yarn" 2>/dev/null || echo "[lug][warning] Yarn non disponible"
                 echo "[lug][step] === SERVICES OPTIONNELS ==="
                 echo "[lug][step] Llama:"
-                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/llama" 2>/dev/null || echo "[lug][warning] Llama non disponible"
+                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/faeries/llama" 2>/dev/null || echo "[lug][warning] Llama non disponible"
                 echo "[lug][step] Qwen:"
-                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/qwen25-05b" 2>/dev/null || echo "[lug][warning] Qwen non disponible"
+                "${TEINE_ENGINE_SCRIPT}" status "${MUIRDRIS_DIR}/faeries/qwen" 2>/dev/null || echo "[lug][warning] Qwen non disponible"
                 echo "[lug][step] Adminer:"
                 "${TEINE_ENGINE_SCRIPT}" status "${FIANNA_DIR}/adminer" 2>/dev/null || echo "[lug][warning] Adminer non disponible"
                 echo "[lug][step] N8N:"
@@ -229,10 +229,10 @@ case "$1" in
         echo "[lug][help] === DÉMARRAGE INDIVIDUEL AVEC TEINE_ENGINE ==="
         echo "[lug][help]   ${TEINE_ENGINE_SCRIPT} start ${CROMLECH_DIR}/mariadb"
         echo "[lug][help]   ${TEINE_ENGINE_SCRIPT} start ${MUIRDRIS_DIR}/fastapi"
-        echo "[lug][help]   ${TEINE_ENGINE_SCRIPT} start ${MUIRDRIS_DIR}/llama"
-        echo "[lug][help]   ${TEINE_ENGINE_SCRIPT} start ${MUIRDRIS_DIR}/qwen25-05b"
+        echo "[lug][help]   ${TEINE_ENGINE_SCRIPT} start ${MUIRDRIS_DIR}/faeries/llama"
+        echo "[lug][help]   ${TEINE_ENGINE_SCRIPT} start ${MUIRDRIS_DIR}/faeries/qwen"
         echo "[lug][help]   ${TEINE_ENGINE_SCRIPT} start ${FIANNA_DIR}/adminer"
         echo "[lug][help]   ${TEINE_ENGINE_SCRIPT} start ${FIANNA_DIR}/n8n"
-        echo "[lug][help]   ${TEINE_ENGINE_SCRIPT} start ${GEASA_DIR}/yarn"
+        echo "[lug][help]   ${TEINE_ENGINE_SCRIPT} start ${CROMLECH_DIR}/yarn"
         ;;
 esac
