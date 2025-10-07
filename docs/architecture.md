@@ -10,11 +10,14 @@
 
 ```
 dagda-lite/
-├── .env                          # Configuration centralisée
+├── .env                          # Configuration active (auto-généré)
+├── .env.dev                      # Configuration développement (localhost)
+├── .env.prod                     # Configuration production (IP serveur)
 ├── .env.example                  # Template configuration
-├── dagda/                        # Moteur d'orchestration (ex: coire-anseasc)
+├── dagda/                        # Moteur d'orchestration
 │   ├── eveil/                    # Scripts d'orchestration
-│   │   ├── taranis.sh            # Orchestrateur principal (ex: lug.sh)
+│   │   ├── taranis.sh            # Orchestrateur principal + sélection env
+│   │   ├── switch-env.sh         # Basculement dev/prod
 │   │   └── stop_all.sh           # Arrêt d'urgence tous services
 │   ├── awens-utils/              # Utilitaires bash (ex: awens-utils)
 │   │   ├── ollamh.sh             # Fonctions communes + détection architecture

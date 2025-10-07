@@ -21,7 +21,7 @@ export default defineConfig({
     port: parseInt(process.env.VITE_PORT || '8900'),
     strictPort: true,
     hmr: {
-      host: process.env.VITE_HOST || 'localhost',
+      host: process.env.HOST || process.env.VITE_HOST || 'localhost',
       port: parseInt(process.env.VITE_PORT || '8900')
     }
   },

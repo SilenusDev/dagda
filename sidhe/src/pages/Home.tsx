@@ -1,4 +1,5 @@
 import { Component } from 'solid-js';
+import { config } from '../config';
 import './Home.css';
 
 const Home: Component = () => {
@@ -16,7 +17,7 @@ const Home: Component = () => {
           <div class="feature-card">
             <h3>🗄️ Base de Données</h3>
             <p>MariaDB avec base dagda_db opérationnelle</p>
-            <a href="http://192.168.1.43:8903" target="_blank" class="btn">
+            <a href={config.adminerUrl} target="_blank" class="btn">
               Accéder à Adminer
             </a>
           </div>
@@ -33,7 +34,7 @@ const Home: Component = () => {
           <div class="feature-card">
             <h3>🚀 API</h3>
             <p>Interface FastAPI pour les services</p>
-            <a href="http://192.168.1.43:8902" target="_blank" class="btn">
+            <a href={`${config.apiUrl}/docs`} target="_blank" class="btn">
               Documentation API
             </a>
           </div>
@@ -41,7 +42,7 @@ const Home: Component = () => {
           <div class="feature-card">
             <h3>🔄 Workflows</h3>
             <p>Automatisation avec N8N</p>
-            <a href="http://192.168.1.43:8904" target="_blank" class="btn">
+            <a href={config.n8nUrl} target="_blank" class="btn">
               Interface N8N
             </a>
           </div>
@@ -52,7 +53,7 @@ const Home: Component = () => {
         <h2>État du Système</h2>
         <div class="info-grid">
           <div class="info-item">
-            <strong>Host:</strong> 192.168.1.43
+            <strong>Host:</strong> {config.host}
           </div>
           <div class="info-item">
             <strong>Base DAGDA:</strong> dagda_db

@@ -172,17 +172,20 @@ teine_start() {
     echo "[teine_engine][step] Démarrage du pod avec configuration..."
     cd "$service_dir"
     
-    # Substituer les variables d'environnement dans pod.yml
+    # Substituer TOUTES les variables d'environnement dans pod.yml
     local temp_pod_file=$(mktemp)
     if command -v envsubst &> /dev/null; then
+        # Exporter toutes les variables du .env pour envsubst
+        set -a
+        source "${DAGDA_ROOT}/.env"
+        set +a
         envsubst < "pod.yml" > "$temp_pod_file"
     else
-        # Fallback manuel si envsubst non disponible
-        sed "s/\${DB_PORT}/$DB_PORT/g; \
-             s/\${DB_ROOT_PASSWORD}/$DB_ROOT_PASSWORD/g; \
-             s/\${DB_NAME}/$DB_NAME/g; \
-             s/\${DB_USER}/$DB_USER/g; \
-             s/\${DB_PASSWORD}/$DB_PASSWORD/g" "pod.yml" > "$temp_pod_file"
+        # Fallback : utiliser eval pour substituer toutes les variables
+        eval "cat <<EOF
+$(cat pod.yml)
+EOF
+" > "$temp_pod_file"
     fi
     
     if ! podman play kube "$temp_pod_file"; then

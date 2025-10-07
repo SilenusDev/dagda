@@ -72,22 +72,32 @@ grep -E "VARIABLE_NAME" .env || echo "Variable manquante"
 
 **❌ INTERDIT :** Modifier une configuration avant d'avoir vérifié les 4 premiers points
 
+## 🎯 PRINCIPE DE COMPARAISON OBLIGATOIRE
+
+**TOUJOURS comparer ce qui fonctionne vs ce qui échoue :**
+- Service A ✅, Service B ❌ → Quelle différence dans les configs ?
+- Avant ✅, maintenant ❌ → Qu'est-ce qui a changé ?
+- Dev ✅, prod ❌ → Quelle variable diffère ?
+
+**Exemple** : MariaDB/Yarn fonctionnent, FastAPI échoue → Comparer les pod.yml → FastAPI a des limites CPU → Cause identifiée
+
 ## 🔄 MÉTHODOLOGIE CAUSE RACINE
 
 ### ✅ APPROCHE CORRECTE
 ```
-1. Identifier le SYMPTÔME (erreur visible)
-2. Chercher la CAUSE RACINE (pourquoi ça échoue)
-3. Vérifier les DÉPENDANCES (ce dont ça dépend)
-4. Proposer la SOLUTION MINIMALE
+1. ÉTAT ACTUEL : Vérifier ce qui fonctionne vs ce qui échoue
+2. COMPARAISON : Comparer services fonctionnels/non-fonctionnels
+3. CAUSE RACINE : Identifier la différence critique
+4. SOLUTION MINIMALE : Corriger la cause, pas les symptômes
+5. VALIDATION : Tester immédiatement
 ```
 
 ### ❌ APPROCHE INTERDITE
 ```
-❌ Modifier la config dès qu'on voit une erreur
-❌ Se concentrer sur les symptômes secondaires
-❌ Proposer des solutions complexes en premier
-❌ Ignorer les dépendances existantes
+❌ Modifier avant de vérifier l'état actuel
+❌ Traiter symptômes avant cause racine
+❌ Créer complexité inutile (double sélection, fonctions superflues)
+❌ Modifier plusieurs choses sans tester entre chaque
 ```
 
 # 🤝 RÈGLES INTERACTION UTILISATEUR (CRITIQUES)

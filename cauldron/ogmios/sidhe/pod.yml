@@ -1,0 +1,48 @@
+# cauldron/ogmios/sidhe/pod.yml
+# Configuration du service Sidhe pour Dagda-Lite
+# Interface utilisateur SolidJS
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dagda-lite-sidhe-pod
+spec:
+  containers:
+  - name: dagda-lite-sidhe
+    image: docker.io/library/node:18-alpine
+    ports:
+    - containerPort: 8900
+      hostPort: ${VITE_PORT}
+    env:
+    - name: VITE_HOST
+      value: "${HOST}"
+    - name: VITE_API_PORT
+      value: "${API_PORT}"
+    - name: VITE_ADMIN_PORT
+      value: "${ADMIN_PORT}"
+    - name: VITE_WORKFLOW_PORT
+      value: "${WORKFLOW_PORT}"
+    workingDir: /app
+    volumeMounts:
+    - name: sidhe-code
+      mountPath: /app
+    - name: node-modules
+      mountPath: /app/node_modules
+    command:
+      - sh
+      - -c
+      - |
+        echo "Installation des dépendances..."
+        yarn install
+        echo "Démarrage de Vite..."
+        yarn dev --host 0.0.0.0 --port 8900
+  volumes:
+  - name: sidhe-code
+    hostPath:
+      path: ${SIDHE_DIR}
+      type: Directory
+  - name: node-modules
+    hostPath:
+      path: ${SIDHE_DIR}/node_modules
+      type: DirectoryOrCreate
+  restartPolicy: Always

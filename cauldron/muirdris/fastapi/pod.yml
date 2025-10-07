@@ -35,13 +35,6 @@ spec:
       mountPath: ${APP_HOME}/config
     - name: fastapi-app
       mountPath: ${APP_HOME}/app
-    resources:
-      limits:
-        memory: "512Mi"
-        cpu: "500m"
-      requests:
-        memory: "256Mi"
-        cpu: "250m"
     livenessProbe:
       httpGet:
         path: /health

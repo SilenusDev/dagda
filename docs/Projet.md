@@ -3,9 +3,9 @@
 ## Vue d'Ensemble
 Dagda-Lite est un orchestrateur ultra-léger de pods Podman conçu pour optimiser l'utilisation des ressources système par allumage/extinction à la demande des services. Inspiré de la mythologie celtique, le projet tire son nom du dieu Dagda et de son chaudron magique d'abondance.
 
-**Version actuelle :** 2.0 - Production avec règles diagnostic renforcées  
+**Version actuelle :** 2.1 - Gestion multi-environnements dev/prod  
 **Statut :** Opérationnel (100% fonctionnel)  
-**Dernière mise à jour :** 23 septembre 2025
+**Dernière mise à jour :** 7 octobre 2025
 
 ## Positionnement Produit
 **Orchestrateur de développement avec IA intégrée et méthodologie diagnostic**
@@ -28,12 +28,15 @@ Dagda-Lite est un orchestrateur ultra-léger de pods Podman conçu pour optimise
 ### Structure du Projet (Architecture Moderne)
 ```
 dagda-lite/
-├── dagda/                           # MOTEUR D'ORCHESTRATION 🎯
-│   ├── eveil/                       # Scripts d'orchestration
-│   │   ├── taranis.sh              # Orchestrateur principal (affichage amélioré)
-│   │   ├── launch-sidhe.sh         # Lancement interface SolidJS
-│   │   ├── lug.sh                  # Redirection (backward compatibility)
-│   │   └── stop_all.sh             # Arrêt global des services
+├── .env                            # Configuration active (auto-généré)
+├── .env.dev                        # Config développement (localhost)
+├── .env.prod                       # Config production (IP serveur)
+├── dagda/                          # MOTEUR D'ORCHESTRATION 🎯
+│   ├── eveil/                      # Scripts d'orchestration
+│   │   ├── taranis.sh             # Orchestrateur + sélection env interactive
+│   │   ├── switch-env.sh          # Basculement dev/prod
+│   │   ├── launch-sidhe.sh        # Lancement interface SolidJS
+│   │   └── stop_all.sh            # Arrêt global des services
 │   ├── awen-core/                  # Moteur principal
 │   │   └── teine_engine.sh         # Moteur générique pods
 │   ├── awens-utils/                # Utilitaires communs

@@ -4,24 +4,74 @@
 
 SCRIPT_NAME="taranis"
 
-# Chargement des variables d'environnement (SÉCURISÉ)
+# Détection automatique de DAGDA_ROOT (SÉCURISÉ)
 if [ -z "$DAGDA_ROOT" ]; then
-    echo "[taranis][error] Variable DAGDA_ROOT non définie" >&2
-    echo "[taranis][error] Assurez-vous que DAGDA_ROOT est défini et que vous avez sourcé le .env" >&2
-    exit 1
+    # Détecter DAGDA_ROOT depuis l'emplacement du script
+    SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+    DETECTED_DAGDA_ROOT="$(dirname "$(dirname "$(dirname "$SCRIPT_PATH")")")"
+    
+    # Vérifier que .env.dev ou .env.prod existe
+    if [ -f "${DETECTED_DAGDA_ROOT}/.env.dev" ] || [ -f "${DETECTED_DAGDA_ROOT}/.env.prod" ]; then
+        export DAGDA_ROOT="$DETECTED_DAGDA_ROOT"
+        echo "[taranis][info] DAGDA_ROOT détecté: ${DAGDA_ROOT}"
+    else
+        echo "[taranis][error] Impossible de détecter DAGDA_ROOT" >&2
+        echo "[taranis][error] Fichiers .env.dev/.env.prod non trouvés dans ${DETECTED_DAGDA_ROOT}" >&2
+        exit 1
+    fi
 fi
 
-if [ ! -f "${DAGDA_ROOT}/.env" ]; then
-    echo "[taranis][error] Fichier .env non trouvé dans ${DAGDA_ROOT}" >&2
-    exit 1
-fi
-
-source "${DAGDA_ROOT}/.env"
-
-# Charger les utilitaires (SÉCURISÉ)
-source "${OLLAMH_SCRIPT}" || { echo "[taranis][error] ollamh.sh non trouvé"; exit 1; }
 
 echo "[taranis][start] Démarrage de l'orchestrateur Dagda-Lite"
+
+# Vérifier si .env existe et est valide (doit être une copie de .env.dev ou .env.prod)
+if [ ! -f "${DAGDA_ROOT}/.env" ] || ! grep -q "^OLLAMH_SCRIPT=" "${DAGDA_ROOT}/.env" 2>/dev/null; then
+    echo "[taranis][warning] Fichier .env manquant ou incomplet"
+    echo "[taranis][info] Initialisation requise - copie de .env.dev ou .env.prod"
+    echo ""
+    echo "Choisissez l'environnement:"
+    echo "  1) dev  - Développement (localhost)"
+    echo "  2) prod - Production (IP serveur)"
+    echo ""
+    read -p "Votre choix [1/2]: " init_choice
+    
+    case "$init_choice" in
+        1)
+            if [ ! -f "${DAGDA_ROOT}/.env.dev" ]; then
+                echo "[taranis][error] Fichier .env.dev non trouvé"
+                exit 1
+            fi
+            echo "[taranis][info] Copie de .env.dev vers .env..."
+            cp "${DAGDA_ROOT}/.env.dev" "${DAGDA_ROOT}/.env"
+            echo "[taranis][success] Environnement DEVELOPMENT activé"
+            ;;
+        2)
+            if [ ! -f "${DAGDA_ROOT}/.env.prod" ]; then
+                echo "[taranis][error] Fichier .env.prod non trouvé"
+                exit 1
+            fi
+            echo "[taranis][info] Copie de .env.prod vers .env..."
+            cp "${DAGDA_ROOT}/.env.prod" "${DAGDA_ROOT}/.env"
+            echo "[taranis][success] Environnement PRODUCTION activé"
+            ;;
+        *)
+            echo "[taranis][error] Choix invalide"
+            exit 1
+            ;;
+    esac
+    echo ""
+fi
+
+# Charger le .env (maintenant complet)
+source "${DAGDA_ROOT}/.env"
+
+# Charger les utilitaires
+if [ -z "$OLLAMH_SCRIPT" ] || [ ! -f "$OLLAMH_SCRIPT" ]; then
+    echo "[taranis][error] OLLAMH_SCRIPT invalide: ${OLLAMH_SCRIPT}" >&2
+    exit 1
+fi
+
+source "${OLLAMH_SCRIPT}"
 
 case "$1" in
     start|dagda)
@@ -94,6 +144,10 @@ case "$1" in
         echo "[taranis][info] Démarrage de Yarn"
         "${TEINE_ENGINE_SCRIPT}" start "${GEASA_DIR}/yarn"
         ;;
+    sidhe)
+        echo "[taranis][info] Démarrage de Sidhe"
+        "${TEINE_ENGINE_SCRIPT}" start "${DAGDA_ROOT}/cauldron/ogmios/sidhe"
+        ;;
     # Commandes d'arrêt par pod
     stop)
         case "$2" in
@@ -124,6 +178,10 @@ case "$1" in
             yarn)
                 echo "[taranis][info] Arrêt de Yarn"
                 "${TEINE_ENGINE_SCRIPT}" stop "${GEASA_DIR}/yarn"
+                ;;
+            sidhe)
+                echo "[taranis][info] Arrêt de Sidhe"
+                "${TEINE_ENGINE_SCRIPT}" stop "${DAGDA_ROOT}/cauldron/ogmios/sidhe"
                 ;;
             dagda)
                 echo "[taranis][info] Arrêt des services essentiels DAGDA-LITE"
