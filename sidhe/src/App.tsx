@@ -1,24 +1,37 @@
 import { Component } from 'solid-js';
 import { Router, Route } from '@solidjs/router';
+import { Server } from 'lucide-solid';
 import Home from './pages/Home';
-import './App.css';
 
 const App: Component = () => {
   return (
-    <div class="app">
-      <header class="app-header">
-        <h1>DAGDA-LITE</h1>
-        <nav>
-          <a href="/">Accueil</a>
-        </nav>
+    <div style={{ "min-height": "100vh", display: "flex", "flex-direction": "column" }}>
+      {/* Header */}
+      <header>
+        <div class="header-content">
+          <div class="header-logo">
+            <Server size={32} color="var(--color-primary)" />
+            <h1>DAGDA-LITE</h1>
+          </div>
+          <nav class="header-nav">
+            <a href="/">Accueil</a>
+            <a href="/services">Services</a>
+          </nav>
+        </div>
       </header>
-      <main class="app-main">
+
+      {/* Main Content */}
+      <main style={{ flex: "1" }}>
         <Router>
           <Route path="/" component={Home} />
         </Router>
       </main>
-      <footer class="app-footer">
-        <p>© 2024 DAGDA-LITE - Interface utilisateur SolidJS</p>
+
+      {/* Footer */}
+      <footer>
+        <div class="footer-content">
+          <p>© 2025 DAGDA-LITE - Interface utilisateur SolidJS</p>
+        </div>
       </footer>
     </div>
   );

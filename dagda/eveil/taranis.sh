@@ -24,46 +24,39 @@ fi
 
 echo "[taranis][start] Démarrage de l'orchestrateur Dagda-Lite"
 
-# Vérifier si .env existe et est valide (doit être une copie de .env.dev ou .env.prod)
-if [ ! -f "${DAGDA_ROOT}/.env" ] || ! grep -q "^OLLAMH_SCRIPT=" "${DAGDA_ROOT}/.env" 2>/dev/null; then
-    echo "[taranis][warning] Fichier .env manquant ou incomplet"
-    echo "[taranis][info] Initialisation requise - copie de .env.dev ou .env.prod"
-    echo ""
-    echo "Choisissez l'environnement:"
-    echo "  1) dev  - Développement (localhost)"
-    echo "  2) prod - Production (IP serveur)"
-    echo ""
-    read -p "Votre choix [1/2]: " init_choice
-    
-    case "$init_choice" in
-        1)
-            if [ ! -f "${DAGDA_ROOT}/.env.dev" ]; then
-                echo "[taranis][error] Fichier .env.dev non trouvé"
-                exit 1
-            fi
-            echo "[taranis][info] Copie de .env.dev vers .env..."
-            cp "${DAGDA_ROOT}/.env.dev" "${DAGDA_ROOT}/.env"
-            echo "[taranis][success] Environnement DEVELOPMENT activé"
-            ;;
-        2)
-            if [ ! -f "${DAGDA_ROOT}/.env.prod" ]; then
-                echo "[taranis][error] Fichier .env.prod non trouvé"
-                exit 1
-            fi
-            echo "[taranis][info] Copie de .env.prod vers .env..."
-            cp "${DAGDA_ROOT}/.env.prod" "${DAGDA_ROOT}/.env"
-            echo "[taranis][success] Environnement PRODUCTION activé"
-            ;;
-        *)
-            echo "[taranis][error] Choix invalide"
-            exit 1
-            ;;
-    esac
-    echo ""
-fi
+# Sélection de l'environnement à chaque démarrage
+echo ""
+echo "Choisissez l'environnement:"
+echo "  1) dev  - Développement (localhost)"
+echo "  2) prod - Production (IP serveur)"
+echo ""
+read -p "Votre choix [1/2]: " env_choice
 
-# Charger le .env (maintenant complet)
-source "${DAGDA_ROOT}/.env"
+case "$env_choice" in
+    1)
+        if [ ! -f "${DAGDA_ROOT}/.env.dev" ]; then
+            echo "[taranis][error] Fichier .env.dev non trouvé"
+            exit 1
+        fi
+        echo "[taranis][info] Chargement de l'environnement DEVELOPMENT..."
+        source "${DAGDA_ROOT}/.env.dev"
+        echo "[taranis][success] Environnement DEVELOPMENT activé (localhost)"
+        ;;
+    2)
+        if [ ! -f "${DAGDA_ROOT}/.env.prod" ]; then
+            echo "[taranis][error] Fichier .env.prod non trouvé"
+            exit 1
+        fi
+        echo "[taranis][info] Chargement de l'environnement PRODUCTION..."
+        source "${DAGDA_ROOT}/.env.prod"
+        echo "[taranis][success] Environnement PRODUCTION activé (IP serveur)"
+        ;;
+    *)
+        echo "[taranis][error] Choix invalide"
+        exit 1
+        ;;
+esac
+echo ""
 
 # Charger les utilitaires
 if [ -z "$OLLAMH_SCRIPT" ] || [ ! -f "$OLLAMH_SCRIPT" ]; then
@@ -86,32 +79,26 @@ case "$1" in
         "${TEINE_ENGINE_SCRIPT}" start "${MUIRDRIS_DIR}/fastapi"
         fastapi_status=$?
         
-        echo "[taranis][step] 📦 Démarrage de Yarn (environnement SolidJS)..."
-        "${TEINE_ENGINE_SCRIPT}" start "${CROMLECH_DIR}/yarn"
-        yarn_status=$?
+        echo "[taranis][step] 🎨 Démarrage de Sidhe (Interface SolidJS)..."
+        "${TEINE_ENGINE_SCRIPT}" start "${OGMIOS_DIR}/sidhe"
+        sidhe_status=$?
         
         echo "[taranis][info] =========================================="
         echo "[taranis][step] 📊 VÉRIFICATION DES SERVICES ESSENTIELS"
         
-        if [ $mariadb_status -eq 0 ] && [ $fastapi_status -eq 0 ] && [ $yarn_status -eq 0 ]; then
+        if [ $mariadb_status -eq 0 ] && [ $fastapi_status -eq 0 ] && [ $sidhe_status -eq 0 ]; then
             echo "[taranis][success] ✅ Services essentiels DAGDA-LITE démarrés avec succès"
             echo "[taranis][info] 🗄️  MariaDB    : http://${HOST}:${DB_PORT}/"
             echo "[taranis][info] 🔧 FastAPI    : http://${HOST}:${API_PORT}/"
-            echo "[taranis][info] 📦 Yarn       : http://${HOST}:${YARN_PORT}/"
-            echo "[taranis][info] =========================================="
-            
-            echo "[taranis][step] 🎨 Lancement automatique de l'interface SolidJS..."
-            "${DAGDA_ROOT}/dagda/eveil/launch-sidhe.sh"
-            
+            echo "[taranis][info] 🎨 Sidhe      : http://${HOST}:${VITE_PORT}/"
             echo "[taranis][info] =========================================="
             echo "[taranis][success] 🎉 DAGDA-LITE OPÉRATIONNEL"
-            echo "[taranis][info] 🎨 Interface SolidJS : http://${HOST}:${VITE_PORT}/"
             echo "[taranis][info] =========================================="
         else
             echo "[taranis][error] ❌ Échec du démarrage de certains services essentiels"
             echo "[taranis][info] 🗄️  MariaDB : $([ $mariadb_status -eq 0 ] && echo "✅" || echo "❌")"
             echo "[taranis][info] 🔧 FastAPI : $([ $fastapi_status -eq 0 ] && echo "✅" || echo "❌")"
-            echo "[taranis][info] 📦 Yarn    : $([ $yarn_status -eq 0 ] && echo "✅" || echo "❌")"
+            echo "[taranis][info] 🎨 Sidhe   : $([ $sidhe_status -eq 0 ] && echo "✅" || echo "❌")"
             exit 1
         fi
         ;;
